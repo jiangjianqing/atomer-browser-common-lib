@@ -1,82 +1,105 @@
 {
-	"name": "atomer-common-lib",
-	"version": "0.0.1",
-	"output": "./build",
-	"scripts": {
-		"lint": "run-s lint:*",
-		"lint:js": "eslint \"{__tests__,test,src,pages/src,pages/lib}/**/*.js\"",
-		"flow": "flow",
-		"type-check": "flow check",
-		"build": "run-s type-check test compile",
-		"compile": "babel src -d dist",
-		"watch": "watchify src/main.js -o build/common-bundle.js --debug ",
-		"serve": "echo 'http-server -o -s -c 1 -a localhost'",
-		"dev": "npm-run-all --parallel watch serve",
-		"bundle": "cross-env NODE_ENV=production browserify -g envify src/main.js | uglifyjs -c warnings=false -m > build/common-bundle.js",
-		"predeploy": "npm run build",
-		"deploy": "echo deploy!!",
-		"test": "mocha"
-	},
-	"browserify-shim": {
-		"jquery": "global:jQuery"
-	},
-	"aliasify": {
-		"aliases": {},
-		"verbose": false
-	},
-	"browserify": {
-		"debug": true,
-		"entries": [
-			"./src/main.js"
-		],
-		"transform": [
-			"babelify",
-			"aliasify",
-			"brfs",
-			"browserify-shim"
-		]
-	},
-	"dependencies": {
-		"q": "latest",
-		"axios": "latest",
-		"js-cookie": "latest",
-		"handlebars": "latest"
-	},
-	"devDependencies": {
-		"npm-run-all": "latest",
-		"envify": "latest",
-		"aliasify": "latest",
-		"babelify": "latest",
-		"brfs": "latest",
-		"browserify": "latest",
-		"browserify-shim": "latest",
-		"gulp": "latest",
-		"gulp-sourcemaps": "latest",
-		"vinyl-buffer": "latest",
-		"vinyl-source-stream": "latest",
-		"eslint": "latest",
-		"eslint-config-atomer": "latest",
-		"eslint-plugin-flowtype": "latest",
-		"eslint-plugin-react": "latest",
-		"karma": "latest",
-		"karma-browserify": "latest",
-		"karma-chrome-launcher": "latest",
-		"karma-firefox-launcher": "latest",
-		"karma-mocha": "latest",
-		"karma-mocha-reporter": "latest",
-		"mocha": "latest",
-		"chai": "latest",
-		"vue-template-compiler": "latest",
-		"flow-bin": "latest",
-		"cross-env": "latest",
-		"watchify": "latest",
-		"babel-cli": "latest",
-		"babel-core": "latest",
-		"babel-eslint": "latest",
-		"babel-plugin-transform-runtime": "latest",
-		"babel-preset-es2015": "latest",
-		"babel-preset-react": "latest",
-		"babel-preset-flow": "latest",
-		"babel-preset-stage-0": "latest"
-	}
+  "name": "atomer-common-lib",
+  "version": "0.0.1",
+  "output": "./build",
+  "scripts": {
+    "lint": "run-s lint:*",
+    "lint:js": "eslint \"{__tests__,test,src,pages/src,pages/lib}/**/*.js\"",
+    "flow": "flow",
+    "type-check": "flow check",
+    "build": "run-s build:*",
+    "build:dist": "run-s type-check clean:dist compile test",
+    "compile": "babel src -d dist",
+    "watch": "watchify src/main.js -o build/common-bundle.js --debug ",
+    "serve": "echo 'http-server -o -s -c 1 -a localhost'",
+    "dev": "npm-run-all --parallel watch serve",
+    "bundle": "cross-env NODE_ENV=production browserify -g envify src/main.js | uglifyjs -c warnings=false -m > build/common-bundle.js",
+    "predeploy": "npm run build",
+    "deploy": "(test 1 -eq 1 || cd ./pages/out && git init && git config user.name \"Travis CI\" && git config user.email \"github@fb.com\" && git add . && git commit -m \"Deploy to GitHub Pages\" && git push --force --quiet \"https://${GH_TOKEN}@github.com/facebook/immutable-js.git\" master:gh-pages > /dev/null 2>1)",
+    "test": "mocha",
+    "test:travis": "npm run test && ./resources/check-changes.sh",
+    "clean:dist": "rimraf dist"
+  },
+  "browserify-shim": {
+    "jquery": "global:jQuery"
+  },
+  "aliasify": {
+    "aliases": {},
+    "verbose": false
+  },
+  "browserify": {
+    "debug": true,
+    "entries": [
+      "./src/main.js"
+    ],
+    "transform": [
+      "babelify",
+      "aliasify",
+      "brfs",
+      "browserify-shim"
+    ]
+  },
+  "dependencies": {
+    "q": "latest",
+    "axios": "latest",
+    "js-cookie": "latest",
+    "handlebars": "latest"
+  },
+  "devDependencies": {
+    "npm-run-all": "latest",
+    "envify": "latest",
+    "aliasify": "latest",
+    "babelify": "latest",
+    "brfs": "latest",
+    "browserify": "latest",
+    "browserify-shim": "latest",
+    "gulp": "latest",
+    "gulp-sourcemaps": "latest",
+    "vinyl-buffer": "latest",
+    "vinyl-source-stream": "latest",
+    "eslint": "latest",
+    "eslint-config-atomer": "latest",
+    "eslint-plugin-flowtype": "latest",
+    "eslint-plugin-react": "latest",
+    "karma": "latest",
+    "karma-browserify": "latest",
+    "karma-chrome-launcher": "latest",
+    "karma-firefox-launcher": "latest",
+    "karma-mocha": "latest",
+    "karma-mocha-reporter": "latest",
+    "mocha": "latest",
+    "chai": "latest",
+    "vue-template-compiler": "latest",
+    "flow-bin": "latest",
+    "rimraf": "latest",
+    "cross-env": "latest",
+    "watchify": "latest",
+    "babel-cli": "latest",
+    "babel-core": "latest",
+    "babel-eslint": "latest",
+    "babel-plugin-transform-runtime": "latest",
+    "babel-preset-es2015": "latest",
+    "babel-preset-react": "latest",
+    "babel-preset-flow": "latest",
+    "babel-preset-stage-0": "latest"
+  },
+  "main": ".eslintrc.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jiangjianqing/atomer-common-lib.git"
+  },
+  "keywords": [
+    "common",
+    "lib"
+  ],
+  "author": "cz_jjq",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jiangjianqing/atomer-common-lib/issues"
+  },
+  "homepage": "https://github.com/jiangjianqing/atomer-common-lib#readme",
+  "description": ""
 }
