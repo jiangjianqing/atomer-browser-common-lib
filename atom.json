@@ -1,0 +1,9 @@
+{
+  "name" : "atomer-common-lib",
+  "version" : "0.0.1",
+  "private" : false,
+  "builder" : "browserify",
+  "frameworks" : [
+
+  ]
+}

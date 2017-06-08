@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>AtomerBrowserApp</title>
+    <script type="text/javascript" src="../assets/vendor/director.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+    <div id="app">
+
+    </div>
+
+    <script src="../build/common-bundle.js"></script>
+    <script>
+        var util = require("util");
+        console.log(util);
+
+        console.log(util.isFunction(function(){}));
+        console.log(util.isArray(null));
+
+        console.log(require('q'));
+        console.log(require('axios'));
+        console.log(require('vue'));
+
+        var localStorage = require('browser-storage')();
+        if (!localStorage.getItem("test")){
+            localStorage.setItem("test", "second test");
+        }
+
+        console.log(localStorage);
+
+        var cookie = require('browser-storage')({type:"cookie"});
+        console.log(cookie);
+
+        cookie.setItem("l12323","3333");
+
+        console.log(cookie.getItem("l12323"));
+
+        console.log(require('handlebars'));
+
+        //一定要注意：jquery是通过browserify-shim引入的，只能在由browserify打包、符合commonjs规范的模块中使用
+        //所以在index.html中直接使用会出错
+        //console.log(require("jquery"));
+        //console.log(require("three"));
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{
+	"name": "atomer-common-lib",
+	"version": "0.0.1",
+	"output": "./build",
+	"scripts": {
+		"lint": "run-s lint:*",
+		"lint:js": "eslint \"{__tests__,test,src,pages/src,pages/lib}/**/*.js\"",
+		"flow": "flow",
+		"type-check": "flow check",
+		"build": "run-s type-check test compile",
+		"compile": "babel src -d dist",
+		"watch": "watchify src/main.js -o build/common-bundle.js --debug ",
+		"serve": "echo 'http-server -o -s -c 1 -a localhost'",
+		"dev": "npm-run-all --parallel watch serve",
+		"bundle": "cross-env NODE_ENV=production browserify -g envify src/main.js | uglifyjs -c warnings=false -m > build/common-bundle.js",
+		"predeploy": "npm run build",
+		"deploy": "echo deploy!!",
+		"test": "mocha"
+	},
+	"browserify-shim": {
+		"jquery": "global:jQuery"
+	},
+	"aliasify": {
+		"aliases": {},
+		"verbose": false
+	},
+	"browserify": {
+		"debug": true,
+		"entries": [
+			"./src/main.js"
+		],
+		"transform": [
+			"babelify",
+			"aliasify",
+			"brfs",
+			"browserify-shim"
+		]
+	},
+	"dependencies": {
+		"q": "latest",
+		"axios": "latest",
+		"js-cookie": "latest",
+		"handlebars": "latest"
+	},
+	"devDependencies": {
+		"npm-run-all": "latest",
+		"envify": "latest",
+		"aliasify": "latest",
+		"babelify": "latest",
+		"brfs": "latest",
+		"browserify": "latest",
+		"browserify-shim": "latest",
+		"gulp": "latest",
+		"gulp-sourcemaps": "latest",
+		"vinyl-buffer": "latest",
+		"vinyl-source-stream": "latest",
+		"eslint": "latest",
+		"eslint-config-atomer": "latest",
+		"eslint-plugin-flowtype": "latest",
+		"eslint-plugin-react": "latest",
+		"karma": "latest",
+		"karma-browserify": "latest",
+		"karma-chrome-launcher": "latest",
+		"karma-firefox-launcher": "latest",
+		"karma-mocha": "latest",
+		"karma-mocha-reporter": "latest",
+		"mocha": "latest",
+		"chai": "latest",
+		"vue-template-compiler": "latest",
+		"flow-bin": "latest",
+		"cross-env": "latest",
+		"watchify": "latest",
+		"babel-cli": "latest",
+		"babel-core": "latest",
+		"babel-eslint": "latest",
+		"babel-plugin-transform-runtime": "latest",
+		"babel-preset-es2015": "latest",
+		"babel-preset-react": "latest",
+		"babel-preset-flow": "latest",
+		"babel-preset-stage-0": "latest"
+	}
+}
