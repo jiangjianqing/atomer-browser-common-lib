@@ -4,6 +4,7 @@ tmp/
 docs/api/
 dist/
 build/
+lib/
 .idea
 *.iml
 .DS_Store

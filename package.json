@@ -10,7 +10,7 @@
 		"build:dist": "run-s type-check clean:dist compile ",
 		"build": "run-s build:lib",
 		"build:lib": "run-s type-check clean:lib compile:lib test",
-		"compile:lib": "babel src -d dist",
+		"compile:lib": "babel src -d lib",
 		"clean:lib": "rimraf lib",
 		"prepublish": "npm run build",
 		"watch:bundle": "watchify src/main.js -o build/common-bundle.js --debug ",
