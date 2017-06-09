@@ -14,4 +14,4 @@ ServiceManager.prototype.set = function(serviceName, service){
     services[serviceName] = service ;
 };
 
-module.exports = new ServiceManager();
+export default new ServiceManager();

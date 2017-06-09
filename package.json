@@ -1,7 +1,8 @@
 {
 	"name": "atomer-common-lib",
-	"version": "0.0.9",
+	"version": "0.0.10",
 	"output": "./build",
+	"main": "lib/index.js",
 	"scripts": {
 		"lint": "run-s lint:*",
 		"lint:js": "eslint \"{__tests__,test,src,pages/src,pages/lib}/**/*.js\"",
