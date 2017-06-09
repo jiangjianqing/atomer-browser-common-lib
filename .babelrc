@@ -3,6 +3,7 @@
     "es2015","stage-0","react","flow"
   ],
   "plugins": [
+    "add-module-exports",
     ["transform-runtime", {
       "polyfill": false,
       "regenerator": true

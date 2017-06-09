@@ -6,6 +6,6 @@ dist/
 build/
 .idea
 *.iml
+lib/
 .DS_Store
 npm-debug.log
-lib/
