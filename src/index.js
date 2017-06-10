@@ -3,8 +3,10 @@
  */
 let serviceManager = require('./service-manager');
 let BrowserStorage = require('./browser-storage');
+let EnvIniter = require('./env-initer');
 
 export default {
     serviceManager,
-    BrowserStorage
+    BrowserStorage,
+  	EnvIniter
 }

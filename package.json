@@ -1,6 +1,6 @@
 {
 	"name": "atomer-common-lib",
-	"version": "0.0.10",
+	"version": "0.0.11",
 	"output": "./build",
 	"scripts": {
 		"lint": "run-s lint:*",
