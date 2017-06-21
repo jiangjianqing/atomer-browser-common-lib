@@ -1,0 +1,48 @@
+{
+  "definitions":{
+      "userExtendInfo":{
+          "type":"object",
+          "properties":{
+              "idCard":{
+                  "type":"string",
+                  "uicontrol":"input",
+                  "maxLength":18,
+                  "format":"^([0-9]){18}$",
+                  "default":"123456789012345678"
+              },
+              "address":{
+                  "type":"string",
+                  "uicontrol":"input",
+                  "default":""
+              }
+          }
+      }
+  },
+  "type": "object",
+  "required" : ["name"],
+  "properties": {
+    "id": {
+      "title": "id编号",
+      "description": "唯一识别号",
+      "type": "number",
+      "default": 0
+    },
+    "name": {
+      "title": "姓名",
+      "description": "指定当前的名字",
+      "type": "string",
+      "default": "myname"
+    },
+    "email": {
+      "title": "电子邮件",
+      "description": "电子邮件地址",
+      "type": "string",
+      "default": "tre@163.com",
+      "maxLength": 20,
+      "uicontrol": "input"
+    },
+    "getProperty":{
+      "type" : "function"
+    }
+  }
+}
