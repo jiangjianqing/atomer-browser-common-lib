@@ -76,8 +76,8 @@ JsonSchema.prototype.addSchema = function(name,schema){
 
 /**
  *解析当前的uri并获取需要的schema堆栈（需要支持3种分布式定义：definitions、扩展信息管理、http）
- * @param schema_stack 当前schema_stack
- * @param uri  json reference（比如 $ref中指向的路径，json pointer）
+ * @param {Array} schema_stack - 当前schema_stack
+ * @param {string}  uri -（比如 $ref中指向的路径，json pointer）
  * @returns {any} schema堆栈，null代表失败
  */
 JsonSchema.prototype.resolveURI = function(schema_stack, uri) {
@@ -212,7 +212,7 @@ JsonSchema.prototype.validate = function(object, schema, options) {
 };
 
 /**
- *
+ *json-schema validate的主体函数
  * @param {Array} schema_stack - schema堆栈
  * @param {Array} object_stack - instance堆栈
  * @param {Object} options - 验证选项
@@ -306,9 +306,11 @@ JsonSchema.prototype.checkValidity = function(schema_stack, object_stack, option
                     props.splice(i, 1);
             }
         }
+        //到这里特别注意：props中还留有properties中不存在的属性
+
         //如果prop没有被赋值，则将其赋予默认值
         if (options.useDefault && hasProp && !malformed) {
-            for (p in schema.properties)
+            for (let p in schema.properties)
                 if (schema.properties.hasOwnProperty(p) && !prop.hasOwnProperty(p) && schema.properties[p].hasOwnProperty('default'))
                     prop[p] = clone(schema.properties[p]['default']);
         }
@@ -328,7 +330,7 @@ JsonSchema.prototype.checkValidity = function(schema_stack, object_stack, option
                         }
                     }
                 } else {
-                    //递归遍历所有属性
+                    //递归遍历所有额外的属性
                     for (let i = 0, len = props.length; i < len; i++) {
                         let objerr = this.checkValidity(schema_stack.concat(schema.additionalProperties), object_stack.concat({object: prop, key: props[i]}), options);
                         if (objerr !== null) {
@@ -344,9 +346,9 @@ JsonSchema.prototype.checkValidity = function(schema_stack, object_stack, option
         }
     } else {//如果prop是一个数组
         if (schema.hasOwnProperty('items')) {
-            if (Array.isArray(schema.items)) {
+            if (Array.isArray(schema.items)) {//如果items是个数组，则表示在其中声明了对应数组每个元素的schema
                 let count = schema.items.length;
-                for (i = 0, len = count; i < len; i++) {
+                for (let i = 0, len = count; i < len; i++) {
                     let objerr = this.checkValidity(schema_stack.concat(schema.items[i]), object_stack.concat({object: prop, key: i}), options);
                     if (objerr !== null) {
                         objerrs[i] = objerr;
@@ -357,7 +359,7 @@ JsonSchema.prototype.checkValidity = function(schema_stack, object_stack, option
                     if (typeof schema.additionalItems === 'boolean') {
                         if (!schema.additionalItems)
                             return {'additionalItems': true};
-                    } else {
+                    } else {//这里假设schema.additionalItems是一个对象，不像schema.items可以是个数组
                         for (let i = count, len = prop.length; i < len; i++) {
                             let objerr = this.checkValidity(schema_stack.concat(schema.additionalItems), object_stack.concat({object: prop, key: i}), options);
                             if (objerr !== null) {
@@ -367,7 +369,7 @@ JsonSchema.prototype.checkValidity = function(schema_stack, object_stack, option
                         }
                     }
                 }
-            } else {//如果items属性不是一个数组
+            } else {//如果items属性不是一个数组,则表示其为一个schema对象
                 for (let i = 0, len = prop.length; i < len; i++) {
                     let objerr = this.checkValidity(schema_stack.concat(schema.items), object_stack.concat({object: prop, key: i}), options);
                     if (objerr !== null) {
@@ -376,7 +378,7 @@ JsonSchema.prototype.checkValidity = function(schema_stack, object_stack, option
                     }
                 }
             }
-        } else if (schema.hasOwnProperty('additionalItems')) {
+        } else if (schema.hasOwnProperty('additionalItems')) {//if (!schema.hasOwnProperty('items')) ...
             if (typeof schema.additionalItems !== 'boolean') {
                 for (let i = 0, len = prop.length; i < len; i++) {
                     let objerr = this.checkValidity(schema_stack.concat(schema.additionalItems), object_stack.concat({object: prop, key: i}), options);
