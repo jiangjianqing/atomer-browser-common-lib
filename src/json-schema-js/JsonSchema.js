@@ -173,7 +173,12 @@ JsonSchema.prototype.resolveObjectRef = function(object_stack, uri) {
  * @returns {any} - validate state
  */
 JsonSchema.prototype.validate = function(object, schema, options) {
-    let schema_stack , errors = null, object_stack = [{object: {'__root__': object}, key: '__root__'}];
+    let tempObj = {
+        "object" : {},
+        "key" : ROOT_KEY_NAME
+    };
+    tempObj.object[ROOT_KEY_NAME] = object;
+    let schema_stack , object_stack = [tempObj];
 
     if (typeof schema === 'string') {//schemaName指向当前已经通过addSchema添加的schema
         schema_stack = this.resolveURI(null, schema);
@@ -192,27 +197,25 @@ JsonSchema.prototype.validate = function(object, schema, options) {
         }
     }
 
-    errors = this.checkValidity(schema_stack, object_stack, options);
+    let errors = this.checkValidity(schema_stack, object_stack, options);
 
     if (errors){
         return {
             "valid": false,
             "errors": errors.hasOwnProperty('schema') ? errors.schema : errors
         }
-    }else{
-        return {
-            "valid": true,
-            "errors": []
-        }
     }
-
+    return {
+        "valid": true,
+        "errors": []
+    }
 };
 
 /**
  *
- * @param schema_stack schema堆栈
- * @param object_stack instance堆栈
- * @param options 验证选项
+ * @param {Array} schema_stack - schema堆栈
+ * @param {Array} object_stack - instance堆栈
+ * @param {Object} options - 验证选项
  * @returns {any} 错误信息，null表示验证成功
  */
 JsonSchema.prototype.checkValidity = function(schema_stack, object_stack, options){
