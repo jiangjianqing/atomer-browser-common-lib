@@ -80,7 +80,7 @@ let generateDefaultValue =  function(schema_stack, object_stack){
 };
 
 let getDefaultInstance = function(schema){
-    let object_stack = [this.buildObjectStackItem(null,this.ROOT_KEY_NAME)];
+    let object_stack = [this.buildObjectStackItem(null)];
     let schema_stack;
     if (typeof schema === "string" ){
         schema_stack = [this.schema[schema]];

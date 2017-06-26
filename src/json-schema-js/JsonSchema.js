@@ -15,7 +15,6 @@ const ROOT_KEY_NAME = '__root__';
 
 function JsonSchema() {
 
-    this.ROOT_KEY_NAME = ROOT_KEY_NAME;
     this.fieldType = createFieldType();
     this.fieldFormat = createFieldFormat();
     this.fieldValidate = createFieldValidate();
@@ -172,7 +171,7 @@ JsonSchema.prototype.resolveObjectRef = function(object_stack, uri) {
  * @returns {any} - validate state
  */
 JsonSchema.prototype.validate = function(object, schema, options) {
-    let schema_stack , object_stack = [this.buildObjectStackItem(object,ROOT_KEY_NAME)];
+    let schema_stack , object_stack = [this.buildObjectStackItem(object)];
 
     if (typeof schema === 'string') {//schemaName指向当前已经通过addSchema添加的schema
         schema_stack = this.resolveURI(null, schema);
@@ -411,6 +410,12 @@ JsonSchema.prototype.checkValidity = function(schema_stack, object_stack, option
 };
 
 JsonSchema.prototype.buildObjectStackItem = function(object,name){
+    if (arguments.length < 2 || !name){//如果没有name,则使用ROOT_KEY_NAME
+        name = ROOT_KEY_NAME;
+    }
+    if(object === undefined){
+        object = null;
+    }
     let tempObj = {
         "object": {},
         "key": name
