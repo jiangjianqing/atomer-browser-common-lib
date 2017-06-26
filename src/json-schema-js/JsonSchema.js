@@ -173,12 +173,7 @@ JsonSchema.prototype.resolveObjectRef = function(object_stack, uri) {
  * @returns {any} - validate state
  */
 JsonSchema.prototype.validate = function(object, schema, options) {
-    let tempObj = {
-        "object" : {},
-        "key" : ROOT_KEY_NAME
-    };
-    tempObj.object[ROOT_KEY_NAME] = object;
-    let schema_stack , object_stack = [tempObj];
+    let schema_stack , object_stack = [this.buildObjectStackItem(object,ROOT_KEY_NAME)];
 
     if (typeof schema === 'string') {//schemaName指向当前已经通过addSchema添加的schema
         schema_stack = this.resolveURI(null, schema);
@@ -247,7 +242,7 @@ JsonSchema.prototype.checkValidity = function(schema_stack, object_stack, option
             if(!this.fieldType[schema.type](prop)){
                 return {'type': schema.type};
             }
-        }else{//这里假定type为array,效果与anyOf相同，后面准备将该段代码删除
+        }else{//deprecated : 这里假定type为array,效果与anyOf相同，后面准备将该段代码删除
             malformed = true;
             for(let i = 0,len = schema.type.length;i < len && malformed;i++){
                 if(this.fieldType[schema.type[i]](prop)){
@@ -282,7 +277,7 @@ JsonSchema.prototype.checkValidity = function(schema_stack, object_stack, option
         if (hasProp || hasPatternProp) {
             let i = props.length;
             while (i--) {
-                var matched = false;
+                let matched = false;
                 if (hasProp && schema.properties.hasOwnProperty(props[i])) {
                     matched = true;
                     let objerr = this.checkValidity(schema_stack.concat(schema.properties[props[i]]), object_stack.concat({object: prop, key: props[i]}), options);
@@ -393,7 +388,7 @@ JsonSchema.prototype.checkValidity = function(schema_stack, object_stack, option
             return {'schema': objerrs};
     }
 
-    //没有在handled中标记为已处理的部分都会在这里处理，基本特指格式验证
+    //如果没有类型问题，就会对其值进行验证。没有在handled中标记为已处理的部分都会进行格式验证
     for(let v in schema){
         if(schema.hasOwnProperty(v) && !this.handled.hasOwnProperty(v)){//如果该属性需要单独处理（format字段和校验字段）
 
@@ -417,7 +412,12 @@ JsonSchema.prototype.checkValidity = function(schema_stack, object_stack, option
 };
 
 JsonSchema.prototype.buildObjectStackItem = function(object,name){
-    return {object: {name: object}, key: name};
+    let tempObj = {
+        "object": {},
+        "key": name
+    };
+    tempObj.object[name] = object;
+    return tempObj;
 };
 
 JsonSchema.prototype.getDefaultInstance = function(schema){
