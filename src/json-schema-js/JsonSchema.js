@@ -219,13 +219,13 @@ JsonSchema.prototype.validate = function(object, schema, options) {
  * @returns {any} 错误信息，null表示验证成功
  */
 JsonSchema.prototype.checkValidity = function(schema_stack, object_stack, options){
-    var objerrs = {};//保存错误信息
-    var sl = schema_stack.length - 1,ol = object_stack.length - 1;
-    var schema = schema_stack[sl],object = object_stack[ol].object;//schema当前解析使用
-    var name = object_stack[ol].key,prop = object[name];//name是当前对象的存储名，prop指向当前处理的对象
-    var hasProp = false;//是否拥有properties属性
-    var hasPatternProp = false;//是否拥有patternProperties属性
-    var malformed = false;//校验是否通过的标志
+    let objerrs = {};//保存错误信息
+    let sl = schema_stack.length - 1,ol = object_stack.length - 1;
+    let schema = schema_stack[sl],object = object_stack[ol].object;//schema当前解析使用
+    let name = object_stack[ol].key,prop = object[name];//name是当前对象的存储名，prop指向当前处理的对象
+    let hasProp = false;//是否拥有properties属性
+    let hasPatternProp = false;//是否拥有patternProperties属性
+    let malformed = false;//校验是否通过的标志
 
     //如果出现$ref，则生成新的schema_stack，并重新处理
     if(schema.hasOwnProperty("$ref")){
@@ -247,7 +247,7 @@ JsonSchema.prototype.checkValidity = function(schema_stack, object_stack, option
             if(!this.fieldType[schema.type](prop)){
                 return {'type': schema.type};
             }
-        }else{//这里假定type为array
+        }else{//这里假定type为array,效果与anyOf相同，后面准备将该段代码删除
             malformed = true;
             for(let i = 0,len = schema.type.length;i < len && malformed;i++){
                 if(this.fieldType[schema.type[i]](prop)){
